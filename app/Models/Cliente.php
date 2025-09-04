@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     use HasFactory;
-    protected $fillable = ['nombre','cif','email','telefono','direccion'];
 
-    public function shipments()
+    protected $fillable = ['nombre', 'cif', 'email', 'telefono'];
+
+    public function direcciones()
     {
-        return $this->hasMany(Envio::class);
+        return $this->morphMany(Direccion::class, 'direccionable');
     }
 }

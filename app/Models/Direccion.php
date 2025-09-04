@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Direccion extends Model
 {
+    use HasFactory;
     protected $table = 'direcciones';
-
     protected $fillable = [
         'name',
         'description',
@@ -18,6 +18,11 @@ class Direccion extends Model
         'postal_code',
         'country',
         'latitude',
-        'longitude',
+        'longitude'
     ];
+
+    public function direccionable()
+    {
+        return $this->morphTo();
+    }
 }

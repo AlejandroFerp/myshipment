@@ -27,21 +27,8 @@ class Shipment extends Model
         return $this->hasMany(Package::class);
     }
 
-    // Relación con Carrier
-    public function carrier()
+      public function direcciones()
     {
-        return $this->belongsTo(Carrier::class);
-    }
-
-    // Relación con Address (origin)
-    public function origin()
-    {
-        return $this->belongsTo(Address::class, 'origin_address_id');
-    }
-
-    // Relación con Address (destiny)
-    public function destiny()
-    {
-        return $this->belongsTo(Address::class, 'destiny_address_id');
+        return $this->morphMany(Direccion::class, 'direccionable');
     }
 }

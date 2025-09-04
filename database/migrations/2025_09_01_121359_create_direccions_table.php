@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('direcciones', function (Blueprint $table) {
+       Schema::create('direcciones', function (Blueprint $table) {
             $table->id();
+            
+            // Relación polimórfica
+            $table->morphs('direccionable'); 
+            // Esto crea: direccionable_id y direccionable_type
+            
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->string('address_line_1')->nullable();

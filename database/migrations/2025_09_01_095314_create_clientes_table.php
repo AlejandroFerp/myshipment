@@ -13,7 +13,9 @@ return new class extends Migration {
         $table->string('cif')->unique(); // 🚀 obligatorio y único
         $table->string('email')->nullable();
         $table->string('telefono')->nullable();
-        $table->string('direccion')->nullable();
+        // Relación con direcciones
+        $table->unsignedBigInteger('direccion_id')->nullable();
+        $table->foreign('direccion_id')->references('id')->on('direcciones')->onDelete('set null');
         $table->timestamps();
     });
 
