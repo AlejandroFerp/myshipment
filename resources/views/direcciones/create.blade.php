@@ -2,7 +2,9 @@
 
 <form action="{{ route('direcciones.store') }}" method="POST">
     @csrf
-
+    <input type="hidden" name="direccionable_id" value="{{ $direccionable_id }}">
+    <input type="hidden" name="direccionable_type" value="{{ $direccionable_type }}">
+    
     <table style="width:100%; max-width:600px; border-collapse:collapse;">
         <tr>
             <td><label for="name">Nombre</label></td>

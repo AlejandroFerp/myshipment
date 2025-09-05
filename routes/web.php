@@ -36,6 +36,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // Rutas para AutonomicCommunity
 Route::resource('autonomic_communities', AutonomicCommunityController::class);
 // Clientes
+Route::get('/clientes/{cliente}/pdf-word', [ClienteController::class, 'generatePdfWord'])->name('clientes.pdf-word');
+Route::get('/clientes/{id}/pdf', [ClienteController::class, 'generarPdf'])->name('clientes.pdf');
 Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
 Route::get('/clientes/create', [ClienteController::class, 'create'])->name('clientes.create');
 Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.store');

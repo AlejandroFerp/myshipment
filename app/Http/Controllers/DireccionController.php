@@ -14,12 +14,17 @@ class DireccionController extends Controller
         return view('direcciones.index', compact('direcciones'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $paises = Countries::all()->pluck('name.common')->sort();
-        return view('direcciones.create', compact('paises'));
-    }
+        // Usamos estos datos para preasignar el cliente
+        $direccionable_id = $request->get('direccionable_id');
+        $direccionable_type = $request->get('direccionable_type');
 
+        // Listado de países
+        $paises = Countries::all()->pluck('name.common')->sort();
+
+        return view('direcciones.create', compact('direccionable_id', 'direccionable_type', 'paises'));
+    }
 
     public function store(Request $request)
     {
@@ -37,9 +42,13 @@ class DireccionController extends Controller
             'longitude' => 'nullable|numeric',
         ]);
 
-        Direccion::create($request->all());
+        $direccion = Direccion::create($request->all());
 
-        return redirect()->route('direcciones.index')->with('success', 'Dirección agregada correctamente');
+        if ($request->ajax()) {
+            return response()->json($direccion);
+        }
+
+        return redirect()->back()->with('success', 'Dirección creada');
     }
 
     public function edit(Direccion $direccion)
