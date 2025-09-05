@@ -9,17 +9,25 @@ use Illuminate\Http\Request;
 
 class CentroController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $centros = Centro::with(['cliente', 'direccion'])->latest()->paginate(15);
+        $query = Centro::with(['cliente', 'direccion'])->latest();
+        // Filtrar por cliente si viene en la query string
+        if ($request->has('cliente_id') && !empty($request->cliente_id)) {
+            $query->where('cliente_id', $request->cliente_id);
+        }
+        // Ejecutar la consulta con paginación
+        $centros = $query->paginate(15);
         return view('centros.index', compact('centros'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $clientes = Cliente::orderBy('nombre')->get();
         $direcciones = Direccion::orderBy('id')->get();
-        return view('centros.create', compact('clientes','direcciones'));
+        // Leer cliente_id desde query string para preseleccionarlo
+        $cliente_id = $request->get('cliente_id');
+        return view('centros.create', compact('clientes','direcciones', 'cliente_id'));
     }
 
     public function store(Request $request)
@@ -44,7 +52,7 @@ class CentroController extends Controller
     public function show(Centro $centro)
     {
         $centro->load(['cliente','direccion']);
-        return view('centros.show', compact('centro'));
+        return view('centros.index', compact('centro'));
     }
 
     public function edit(Centro $centro)

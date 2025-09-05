@@ -1,26 +1,69 @@
-<h1>Clientes</h1>
-<a href="{{ route('home') }}">🏠 Home</a>
-<a href="{{ route('clientes.create') }}">Nuevo Cliente</a>
+@extends('layouts.app')
 
-<ul>
-@foreach($clientes as $cliente)
-    <li>
-        Nombre: {{ $cliente->nombre }} - CIF: {{ $cliente->cif }} - Email: {{ $cliente->email ?? 'Sin email' }}
-        <a href="{{ route('clientes.edit', $cliente) }}">Editar</a>
-
-        <form action="{{ route('clientes.destroy', $cliente) }}" method="POST" style="display:inline">
-            @csrf
-            @method('DELETE')
-            <button type="submit">Eliminar</button>
-        </form>
-
-        <!-- Botón para generar PDF -->
-        <a href="{{ route('clientes.pdf', $cliente) }}" target="_blank" class="btn btn-primary btn-sm">
-            Generar PDF
+@section('content')
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0"> Clientes</h1>
+    <div>
+        <a href="{{ route('home') }}" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-house-door"></i> Home
         </a>
-        <a href="{{ route('clientes.pdf-word', $cliente) }}" target="_blank" class="btn btn-primary btn-sm">
-            Generar PDF Profesional
+        <a href="{{ route('clientes.create') }}" class="btn btn-success">
+            <i class="bi bi-person-plus"></i> Nuevo Cliente
         </a>
-    </li>
-@endforeach
-</ul>
+    </div>
+</div>
+
+@if($clientes->isEmpty())
+    <div class="alert alert-info">
+        No hay clientes registrados todavía.
+    </div>
+@else
+    <div class="table-responsive">
+        <table class="table table-hover align-middle shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>CIF</th>
+                    <th>Email</th>
+                    <th>Telefono</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($clientes as $cliente)
+                    <tr>
+                        <td>{{ $cliente->nombre }}</td>
+                        <td>{{ $cliente->cif }}</td>
+                        <td>{{ $cliente->email ?? '📭 Sin email' }}</td>
+                        <td>{{ $cliente->telefono}}</td>
+                        <td class="text-center">
+                            <a href="{{ route('clientes.edit', $cliente) }}" class="btn btn-sm btn-warning me-1">
+                                <i class="bi bi-pencil-square"></i> </a>
+
+                            <form action="{{ route('clientes.destroy', $cliente) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar este cliente?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger me-1">
+                                    <i class="bi bi-trash"></i> 
+                                </button>
+                            </form>
+                            <!-- Nuevo botón: Añadir Centro -->
+                            <a href="{{ route('centros.create') }}?cliente_id={{ $cliente->id }}" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Añadir Centro">
+                                <i class="bi bi-building-add"></i>
+                            </a>
+
+                            <!-- Nuevo botón: Ver Centros del Cliente -->
+                            <a href="{{ route('centros.index') }}?cliente_id={{ $cliente->id }}" class="btn btn-info btn-sm" data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="Ver Centos">
+                                <i class="bi bi-building"></i>
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@endif
+@endsection

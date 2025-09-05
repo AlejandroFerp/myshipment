@@ -1,47 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Editar Cliente</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Editar Cliente</h1>
 
     <form action="{{ route('clientes.update', $cliente) }}" method="POST">
         @csrf
         @method('PUT')
 
         <div class="mb-3">
-            <label>Nombre</label>
+            <label class="form-label">Nombre</label>
             <input type="text" name="nombre" value="{{ old('nombre', $cliente->nombre) }}" class="form-control" required>
         </div>
 
         <div class="mb-3">
-            <label>CIF</label>
+            <label class="form-label">CIF</label>
             <input type="text" name="cif" value="{{ old('cif', $cliente->cif) }}" class="form-control" required>
         </div>
 
         <div class="mb-3">
-            <label>Email</label>
+            <label class="form-label">Email</label>
             <input type="email" name="email" value="{{ old('email', $cliente->email) }}" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label>Teléfono</label>
+            <label class="form-label">Teléfono</label>
             <input type="text" name="telefono" value="{{ old('telefono', $cliente->telefono) }}" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label for="direccion_id">Dirección principal</label>
-            <select id="direccion_id" name="direccion_id" class="form-control">
+            <label for="direccion_id" class="form-label">Dirección principal</label>
+            <select id="direccion_id" name="direccion_id" class="form-select">
+                <option value="">Seleccione una dirección</option>
                 @foreach($direcciones as $direccion)
                     <option value="{{ $direccion->id }}" 
-                        {{ (string) (old('direccion_id', $cliente->direccion_id) === (string) $direccion->id) ? 'selected' : '' }}>
+                        {{ (string) old('direccion_id', $cliente->direccion_id) === (string) $direccion->id ? 'selected' : '' }}>
                         {{ $direccion->address_line_1 }} - {{ $direccion->district_city }}
                     </option>
                 @endforeach
             </select>
         </div>
 
-        <button type="submit" class="btn btn-success">Actualizar</button>
-        <a href="{{ route('clientes.index') }}" class="btn btn-secondary">Volver</a>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-circle"></i> Actualizar
+            </button>
+            <a href="{{ route('clientes.index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left-circle"></i> Volver
+            </a>
+        </div>
     </form>
 </div>
 
@@ -71,18 +78,14 @@ $(document).ready(function() {
         if (!$('.select2-create-address').length) {
             const link = $('<div class="select2-create-address p-2" style="cursor:pointer;color:blue;">+ Crear nueva dirección</div>');
             link.on('click', function() {
-                // Cargar formulario de nueva dirección en el modal
                 $('#addressModalContent').load("{{ route('direcciones.create', [
                     'direccionable_id' => $cliente->id,
                     'direccionable_type' => \App\Models\Cliente::class
                 ]) }}", function() {
                     $('#addressModal').modal('show');
-
-                    // Capturar envío del formulario dentro del modal
                     $('#addressForm').off('submit').on('submit', function(e) {
                         e.preventDefault();
                         const formData = $(this).serialize();
-
                         $.post("{{ route('direcciones.store') }}", formData, function(data) {
                             const newOption = new Option(data.address_line_1 + ' - ' + data.district_city, data.id, true, true);
                             $('#direccion_id').append(newOption).trigger('change');
@@ -92,7 +95,6 @@ $(document).ready(function() {
                         });
                     });
                 });
-
                 $('.select2-dropdown').hide();
             });
             $('.select2-dropdown').append(link);

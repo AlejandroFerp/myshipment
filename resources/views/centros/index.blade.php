@@ -31,7 +31,7 @@
                         <td>{{ $centro->telefono ?? '—' }}</td>
                         <td>{{ $centro->email ?? '—' }}</td>
                         <td>
-                            <a href="{{ route('centros.show', $centro) }}" class="btn btn-info btn-sm">👁 Ver</a>
+                            <a href="{{ route('centros.index', $centro) }}" class="btn btn-info btn-sm">👁 Ver</a>
                             <a href="{{ route('centros.edit', $centro) }}" class="btn btn-primary btn-sm">✏ Editar</a>
                             <form action="{{ route('centros.destroy', $centro) }}" method="POST" class="d-inline">
                                 @csrf
