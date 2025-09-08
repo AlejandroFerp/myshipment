@@ -68,6 +68,7 @@ Route::get('/direcciones/{direccion}/edit', [DireccionController::class, 'edit']
 Route::put('/direcciones/{direccion}', [DireccionController::class, 'update'])->name('direcciones.update');
 Route::delete('/direcciones/{direccion}', [DireccionController::class, 'destroy'])->name('direcciones.destroy');
 // Centros
+Route::get('/centros/{centro}/contrato', [CentroController::class, 'generarContrato'])->name('centros.contrato');
 Route::get('/centros', [CentroController::class, 'index'])->name('centros.index');
 Route::get('/centros/create', [CentroController::class, 'create'])->name('centros.create');
 Route::post('/centros', [CentroController::class, 'store'])->name('centros.store');
