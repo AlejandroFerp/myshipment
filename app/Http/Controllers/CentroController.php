@@ -8,6 +8,11 @@ use App\Models\Direccion;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Barryvdh\DomPDF\Facade\Pdf;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf as PdfWriter;
 
 class CentroController extends Controller
 {
@@ -82,68 +87,60 @@ class CentroController extends Controller
 
         return redirect()->route('centros.index')->with('success', 'Centro actualizado correctamente.');
     }
-    public function generarContrato(Centro $centro)
-    {
-        // Cargar plantilla
-        $template = new TemplateProcessor(resource_path('templates/PLANTILLA_CT.docx'));
 
-        // Reemplazar valores de la plantilla
-        $template->setValue('{{FECHA}}', now()->format('d/m/Y'));
-        $template->setValue('{{NO_CT}}', 'CT-' . str_pad($centro->id, 5, '0', STR_PAD_LEFT));
+    
+public function generarContrato(Centro $centro)
+{
+    // Convertimos en objeto directamente con (object)
+    $contrato = (object) [
+        'numero_ct'            => 'CT-' . str_pad($centro->id, 5, '0', STR_PAD_LEFT),
+        'fecha'                => now()->format('d/m/Y'),
+        'fecha_inicio'         => now()->format('d/m/Y'),
+        'fecha_fin'            => now()->addYear()->format('d/m/Y'),
 
-        // Datos del origen (centro actual)
-        $template->setValue('{{RAZON_SOCIAL_O}}', $centro->cliente->nombre ?? '');
-        $template->setValue('{{NOMBRE_CENTRO_O}}', $centro->nombre_comercial ?? '');
-        $template->setValue('{{DIRECCION_O}}', $centro->direccion->address_line_1 ?? '');
-        $template->setValue('{{MUNICIPIO_O}}', $centro->direccion->district_city ?? '');
-        $template->setValue('{{CIF_O}}', $centro->cliente->cif ?? '');
-        $template->setValue('{{C_POSTAL_O}}', $centro->direccion->postal_code ?? '');
-        $template->setValue('{{PROVINCIA_O}}', $centro->direccion->state_province ?? '');
-        $template->setValue('{{CONTACTO_O}}', $centro->nombre_contacto ?? '');
-        $template->setValue('{{TELEFONO_O}}', $centro->telefono ?? '');
-        $template->setValue('{{EMAIL_O}}', $centro->email ?? '');
-        $template->setValue('{{NO_PYGR_O}}', $centro->no_pygr ?? '');
-        $template->setValue('{{NIMA_O}}', $centro->nima ?? '');
+        // Origen / operador del traslado
+        'origen_nif'           => $centro->cliente->cif ?? '',
+        'origen_razon_social'  => $centro->cliente->nombre ?? '',
+        'origen_nima'          => $centro->nima ?? '',
+        'origen_nombre_centro' => $centro->nombre_comercial ?? '',
+        'origen_direccion'     => $centro->direccion->address_line_1 ?? '',
+        'origen_cp'            => $centro->direccion->postal_code ?? '',
+        'origen_municipio'     => $centro->direccion->district_city ?? '',
+        'origen_provincia'     => $centro->direccion->state_province ?? '',
+        'origen_telefono'      => $centro->telefono ?? '',
+        'origen_email'         => $centro->email ?? '',
 
-        // Datos de la empresa autorizada (rellena según tu lógica o config)
-        $template->setValue('{{RAZON_SOCIAL_R}}', 'Empresa Autorizada X');
-        $template->setValue('{{NOMBRE_CENTRO_R}}', 'Planta Tratamiento');
-        $template->setValue('{{DIRECCION_R}}', 'Polígono Industrial 123');
-        $template->setValue('{{MUNICIPIO_R}}', 'Valencia');
-        $template->setValue('{{CIF_R}}', 'B12345678');
-        $template->setValue('{{C_POSTAL_R}}', '46001');
-        $template->setValue('{{PROVINCIA_R}}', 'Valencia');
-        $template->setValue('{{CONTACTO_R}}', 'Responsable Planta');
-        $template->setValue('{{TELEFONO_R}}', '960000000');
-        $template->setValue('{{EMAIL_R}}', 'planta@empresa.com');
-        $template->setValue('{{NO_PYGR_R}}', '123/XYZ');
-        $template->setValue('{{NIMA_R}}', '0300099999');
+        // Destino (ejemplo fijo, cámbialo si quieres que sea dinámico)
+        'destino_nif'          => 'B16735805',
+        'destino_razon_social' => 'GDV GESTION Y DISTRIBUCION S.L.',
+        'destino_nima'         => '0300025443',
+        'destino_nombre_centro'=> 'CENTRAL',
+        'destino_direccion'    => 'Calle Sagitario, 5',
+        'destino_cp'           => '03006',
+        'destino_municipio'    => 'Alicante',
+        'destino_provincia'    => 'Alicante',
+        'destino_telefono'     => '865 55 08 70',
+        'destino_email'        => 'residuos@gdvmobility.com',
 
-        // Ejemplo de destino autorizado (se puede parametrizar)
-        $template->setValue('{{RAZON_SOCIAL_A}}', 'Empresa Destino Y');
-        $template->setValue('{{NOMBRE_CENTRO_A}}', 'Central Y');
-        $template->setValue('{{DIRECCION_A}}', 'Av. Principal 45');
-        $template->setValue('{{MUNICIPIO_A}}', 'Madrid');
-        $template->setValue('{{CIF_A}}', 'B87654321');
-        $template->setValue('{{C_POSTAL_A}}', '28001');
-        $template->setValue('{{PROVINCIA_A}}', 'Madrid');
-        $template->setValue('{{CONTACTO_A}}', 'Encargado Recepción');
-        $template->setValue('{{TELEFONO_A}}', '910000000');
-        $template->setValue('{{EMAIL_A}}', 'recepcion@empresa.com');
-        $template->setValue('{{NO_PYGR_A}}', '456/ABC');
-        $template->setValue('{{NIMA_A}}', '2800088888');
+        // Residuos
+        'codigo_ler'           => '160605',
+        'descripcion_residuo'  => 'Baterías de litio',
+        'tratamiento'          => 'R04',
+        'hp'                   => 'HP6',
+        'cantidad'             => '1200',
+    ];
 
-        // Datos del residuo (ejemplo)
-        $template->setValue('{{LER}}', '160605');
-        $template->setValue('{{PESO}}', '1200'); // en kg
+    // Generar PDF con la vista Blade
+    $pdf = Pdf::loadView('pdf.CT', compact('contrato'))
+              ->setPaper('A4', 'portrait');
 
-        // Guardar en storage
-        $fileName = 'CT_' . $centro->id . '_' . now()->format('Ymd_His') . '.docx';
-        $path = storage_path("app/public/{$fileName}");
-        $template->saveAs($path);
-        // Descargar y borrar después
-        return response()->download($path)->deleteFileAfterSend(true);
-    }
+    $fileName = 'CT_' . $centro->id . '_' . now()->format('Ymd_His') . '.pdf';
+
+    return $pdf->download($fileName);
+}
+
+
+
 
     public function destroy(Centro $centro)
     {

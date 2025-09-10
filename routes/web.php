@@ -89,4 +89,40 @@ Route::resource('autorizacionesMedioambientales', EnvironmentalAuthorizationCont
     ]);
 
 // Puedes añadir rutas similares para documentos, envíos y recogidas si tienes sus controladores
+// preview
+Route::get('/vista-prueba', function () {
+    $contrato = (object)[
+        'numero_ct' => 'CT-00001',
+        'fecha' => now()->format('d/m/Y'),
+        'fecha_inicio' => now()->format('d/m/Y'),
+        'fecha_fin' => now()->addYear()->format('d/m/Y'),
+        'origen_nif' => '12345678A',
+        'origen_razon_social' => 'Empresa Origen',
+        'origen_nima' => 'NIMA001',
+        'origen_nombre_centro' => 'Centro Origen',
+        'origen_direccion' => 'Calle Origen, 1',
+        'origen_cp' => '28001',
+        'origen_municipio' => 'Madrid',
+        'origen_provincia' => 'Madrid',
+        'origen_telefono' => '600000000',
+        'origen_email' => 'origen@empresa.com',
+        'destino_nif' => 'B16735805',
+        'destino_razon_social' => 'GDV GESTION Y DISTRIBUCION S.L.',
+        'destino_nima' => '0300025443',
+        'destino_nombre_centro' => 'CENTRAL',
+        'destino_direccion' => 'Calle Sagitario, 5',
+        'destino_cp' => '03006',
+        'destino_municipio' => 'Alicante',
+        'destino_provincia' => 'Alicante',
+        'destino_telefono' => '865550870',
+        'destino_email' => 'residuos@gdvmobility.com',
+        'codigo_ler' => '160605',
+        'descripcion_residuo' => 'Baterías de litio',
+        'tratamiento' => 'R04',
+        'hp' => 'HP6',
+        'cantidad' => '1200',
+    ];
+
+    return view('pdf.CT', compact('contrato'));
+});
 
