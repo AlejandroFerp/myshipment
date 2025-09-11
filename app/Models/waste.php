@@ -11,10 +11,18 @@ class Waste extends Model
 
     protected $table = 'wastes';
 
-    protected $fillable = [
-        'lers',
-        'code',
-        'name',
-        'description',
-    ];
+    protected $fillable = ['lista_ler_id', 'code', 'name', 'description'];
+    //relaciones
+    // Un waste pertenece a un código LER
+    public function ler() {
+        return $this->belongsTo(ListaLer::class, 'lista_ler_id');
+    }
+    // Un waste puede estar asociado a muchos centros
+    public function centros() {
+        return $this->belongsToMany(Centro::class, 'centro_residuo')
+                        ->withPivot(['operacion_tratamiento','peligrosidad','observaciones'])
+                        ->withTimestamps();
+    }
 }
+
+   

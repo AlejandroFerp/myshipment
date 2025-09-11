@@ -37,7 +37,7 @@
             <label for="center_id" class="form-label">Centro</label>
             <select name="center_id" id="center_id" class="form-control" required>
                 <option value="">Seleccione...</option>
-                @foreach($centers as $center)
+                @foreach($centros as $center)
                     <option value="{{ $center->id }}" {{ old('center_id', $autorizacionMedioambiental->center_id) == $center->id ? 'selected' : '' }}>
                         {{ $center->name }}
                     </option>

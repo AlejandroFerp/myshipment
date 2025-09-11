@@ -4,24 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Waste;
 use Illuminate\Http\Request;
+use App\Models\ListaLer;
 
 class WastesController extends Controller
 {
     public function index()
     {
-        $wastes = Waste::all();
+        // Cargamos la relación listaLer para poder usarla si es necesario
+        $wastes = Waste::with('listaLer')->get();
         return view('wastes.index', compact('wastes'));
     }
 
     public function create()
     {
-        return view('wastes.create');
+        $listaLer = ListaLer::all(); // Cargamos opciones LER
+        return view('wastes.create', compact('listaLer'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'lers' => 'nullable|string|max:50',
+            'lista_ler_id' => 'nullable|exists:lista_ler,id', // selección de LER
             'code' => 'required|string|max:50|unique:wastes,code',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -35,13 +38,14 @@ class WastesController extends Controller
 
     public function edit(Waste $waste)
     {
-        return view('wastes.edit', compact('waste'));
+        $listaLer = ListaLer::all(); // Cargamos opciones LER
+        return view('wastes.edit', compact('waste', 'listaLer'));
     }
 
     public function update(Request $request, Waste $waste)
     {
         $validated = $request->validate([
-            'lers' => 'nullable|string|max:50',
+            'lista_ler_id' => 'nullable|exists:lista_ler,id', // selección de LER
             'code' => "required|string|max:50|unique:wastes,code,{$waste->id}",
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',

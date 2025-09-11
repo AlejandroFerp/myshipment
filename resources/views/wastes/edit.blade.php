@@ -6,27 +6,41 @@
 
     @if($errors->any())
         <div class="alert alert-danger">
-            <ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
     @endif
 
-    <form action="{{ route('wastes.update', $waste) }}" method="POST">
+    <form action="{{ route('wastes.update', $waste->id) }}" method="POST">
         @csrf
         @method('PUT')
 
         <div class="mb-3">
-            <label for="lers" class="form-label">LERS</label>
-            <input type="text" name="lers" id="lers" class="form-control" value="{{ old('lers', $waste->lers) }}">
+            <label for="lista_ler_id" class="form-label">LERS</label>
+            <select name="lista_ler_id" id="lista_ler_id" class="form-control">
+                <option value="">-- Selecciona un LER --</option>
+                @foreach($listaLer as $ler)
+                    <option value="{{ $ler->id }}"
+                        {{ (old('lista_ler_id', $waste->lista_ler_id) == $ler->id) ? 'selected' : '' }}>
+                        {{ $ler->codigo }} - {{ $ler->descripcion }}
+                    </option>
+                @endforeach
+            </select>
         </div>
 
         <div class="mb-3">
             <label for="code" class="form-label">Code</label>
-            <input type="text" name="code" id="code" class="form-control" value="{{ old('code', $waste->code) }}" required>
+            <input type="text" name="code" id="code" class="form-control"
+                   value="{{ old('code', $waste->code) }}" required>
         </div>
 
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $waste->name) }}" required>
+            <input type="text" name="name" id="name" class="form-control"
+                   value="{{ old('name', $waste->name) }}" required>
         </div>
 
         <div class="mb-3">

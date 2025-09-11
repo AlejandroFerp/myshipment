@@ -10,10 +10,12 @@ return new class extends Migration
     {
         Schema::create('wastes', function (Blueprint $table) {
             $table->id();
-            $table->string('lers')->nullable();
-            $table->string('code')->unique();
-            $table->string('name');
-            $table->text('description')->nullable();
+            $table->integer('internal_code')->unique();
+            // 👇 relación con lista_ler
+            $table->foreignId('ler_id')
+                  ->constrained('lista_ler') // apunta a id de lista_ler
+                  ->cascadeOnDelete();
+            $table->string('descripcion_libre')->nullable();
             $table->timestamps();
         });
     }

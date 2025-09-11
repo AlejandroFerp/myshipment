@@ -36,4 +36,9 @@ class Centro extends Model
     {
         return $this->belongsTo(Direccion::class);
     }
+    public function wastes() {
+        return $this->belongsToMany(Waste::class, 'centro_residuo')
+                    ->withPivot(['operacion_tratamiento','peligrosidad','observaciones'])
+                    ->withTimestamps();
+    }
 }

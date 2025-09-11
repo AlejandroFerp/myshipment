@@ -1,0 +1,166 @@
+[
+    {
+        "texto":" Residuos de la transformación física y química de minerales metálicos.",
+        "codigo":"01 03"
+    },
+    {
+        "texto":"* Estériles que generan ácido procedentes de la transformación de sulfuros.",
+        "codigo":"01 03 04"
+    },
+    {
+        "texto":"* Otros estériles que contienen sustancias peligrosas.",
+        "codigo":"01 03 05"
+    },
+    {
+        "texto":" Estériles distintos de los mencionados en los códigos 01 03 04 y 01 03 05.",
+        "codigo":"01 03 06"
+    },
+    {
+        "texto":"* Otros residuos que contienen sustancias peligrosas procedentes de la transformación física y química de minerales metálicos.",
+        "codigo":"01 03 07"
+    },
+    {
+        "texto":" Residuos de polvo y arenilla distintos de los mencionados en el código 01 03 07.",
+        "codigo":"01 03 08"
+    },
+    {
+        "texto":" Lodos rojos de la producción de alúmina distintos de los mencionados en el código 01 03 07.",
+        "codigo":"01 03 09"
+    },
+    {
+        "texto":" Residuos no especificados en otra categoría.",
+        "codigo":"01 03 99"
+    },
+    {
+        "texto":" Residuos de las industrias del cuero y de la piel.",
+        "codigo":"04 01"
+    },
+    {
+        "texto":" Carnazas y serrajes de encalado.",
+        "codigo":"04 01 01"
+    },
+    {
+        "texto":" Residuos de encalado.",
+        "codigo":"04 01 02"
+    },
+    {
+        "texto":"* Residuos de desengrasado que contienen disolventes sin fase líquida.",
+        "codigo":"04 01 03"
+    },
+    {
+        "texto":" Residuos líquidos de curtición que contienen cromo.",
+        "codigo":"04 01 04"
+    },
+    {
+        "texto":" Residuos líquidos de curtición que no contienen cromo.",
+        "codigo":"04 01 05"
+    },
+    {
+        "texto":" Lodos, en particular los procedentes del tratamiento in situ de efluentes, que contienen cromo.",
+        "codigo":"04 01 06"
+    },
+    {
+        "texto":" Lodos, en particular los procedentes del tratamiento in situ de efluentes, que no contienen cromo.",
+        "codigo":"04 01 07"
+    },
+    {
+        "texto":" Residuos de piel curtida [serrajes, rebajaduras, recortes, polvo de esmerilado] que contienen cromo.",
+        "codigo":"04 01 08"
+    },
+    {
+        "texto":" Residuos de confección y acabado.",
+        "codigo":"04 01 09"
+    },
+    {
+        "texto":" Residuos no especificados en otra categoría.",
+        "codigo":"04 01 99"
+    },
+    {
+        "texto":" Residuos del moldeado y tratamiento físico y mecánico de superficie de metales y plásticos.",
+        "codigo":"12 01"
+    },
+    {
+        "texto":" Limaduras y virutas de metales férreos.",
+        "codigo":"12 01 01"
+    },
+    {
+        "texto":" Polvo y partículas de metales férreos.",
+        "codigo":"12 01 02"
+    },
+    {
+        "texto":" Limaduras y virutas de metales no férreos.",
+        "codigo":"12 01 03"
+    },
+    {
+        "texto":" Polvo y partículas de metales no férreos.",
+        "codigo":"12 01 04"
+    },
+    {
+        "texto":" Virutas y rebabas de plástico.",
+        "codigo":"12 01 05"
+    },
+    {
+        "texto":"* Aceites minerales de mecanizado que contienen halógenos [excepto las emulsiones o disoluciones].",
+        "codigo":"12 01 06"
+    },
+    {
+        "texto":"* Aceites minerales de mecanizado sin halógenos [excepto las emulsiones o disoluciones].",
+        "codigo":"12 01 07"
+    },
+    {
+        "texto":"* Emulsiones y disoluciones de mecanizado que contienen halógenos.",
+        "codigo":"12 01 08"
+    },
+    {
+        "texto":"* Emulsiones y disoluciones de mecanizado sin halógenos.",
+        "codigo":"12 01 09"
+    },
+    {
+        "texto":"* Aceites sintéticos de mecanizado.",
+        "codigo":"12 01 10"
+    },
+    {
+        "texto":"* Ceras y grasas usadas.",
+        "codigo":"12 01 12"
+    },
+    {
+        "texto":" Residuos de soldadura.",
+        "codigo":"12 01 13"
+    },
+    {
+        "texto":"* Lodos de mecanizado que contienen sustancias peligrosas.",
+        "codigo":"12 01 14"
+    },
+    {
+        "texto":" Lodos de mecanizado distintos de los especificados en el código 12 01 14.",
+        "codigo":"12 01 15"
+    },
+    {
+        "texto":"* Residuos de granallado o chorreado que contienen sustancias peligrosas.",
+        "codigo":"12 01 16"
+    },
+    {
+        "texto":" Residuos de granallado o chorreado distintos de los especificados en el código 12 01 16.",
+        "codigo":"12 01 17"
+    },
+    {
+        "texto":"* Lodos metálicos [lodos de esmerilado, rectificado y lapeado] que contienen aceites.",
+        "codigo":"12 01 18"
+    },
+    {
+        "texto":"* Aceites de mecanizado fácilmente biodegradables.",
+        "codigo":"12 01 19"
+    },
+    {
+        "texto":"* Muelas y materiales de esmerilado usados que contienen sustancias peligrosas.",
+        "codigo":"12 01 20"
+    },
+    {
+        "texto":" Muelas y materiales de esmerilado usados distintos de los especificados en el código 12 01 20.",
+        "codigo":"12 01 21"
+    },
+    {
+        "texto":" Residuos no especificados en otra categoría.",
+        "codigo":"12 01 99"
+    }
+]

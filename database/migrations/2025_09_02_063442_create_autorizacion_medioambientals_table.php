@@ -12,10 +12,10 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('autorizacion_id')->constrained('autorizaciones')->onDelete('cascade'); // relación
-            $table->foreignId('center_id')->constrained('centers')->onDelete('cascade');
+            $table->foreignId('center_id')->constrained('centros')->onDelete('cascade');
             $table->string('code')->unique();
             $table->foreignId('autonomic_community_id')->constrained('autonomic_communities')->onDelete('cascade');
-            $table->foreignId('type_of_authorization_id')->constrained('type_of_authorizations')->onDelete('cascade');
+            // $table->foreignId('type_of_authorization_id')->constrained('type_of_authorizations')->onDelete('cascade');
             $table->foreignId('waste_id')->constrained('wastes')->onDelete('cascade');
             $table->string('lers')->nullable();
 

@@ -24,7 +24,9 @@
             <tbody>
                 @foreach($wastes as $waste)
                     <tr>
-                        <td>{{ $waste->lers }}</td>
+                        <td>
+                            {{ $waste->listaLer ? $waste->listaLer->codigo . ' - ' . $waste->listaLer->descripcion : '-' }}
+                        </td>
                         <td>{{ $waste->code }}</td>
                         <td>{{ $waste->name }}</td>
                         <td>{{ $waste->description }}</td>

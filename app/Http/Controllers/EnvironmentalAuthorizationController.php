@@ -17,14 +17,14 @@ class EnvironmentalAuthorizationController extends Controller
     {
         // Traer todos los modelos relacionados para los picklists
         $autorizaciones = \App\Models\Autorizacion::all();
-        $centers = \App\Models\Centro::all();
+        $centros = \App\Models\Centro::all();
         $autonomicCommunities = \App\Models\AutonomicCommunity::all();
         $typeOfAuthorizations = \App\Models\Autorizacion::all();
         $wastes = \App\Models\Waste::all();
 
         return view('autorizaciones_medioambientales.create', compact(
             'autorizaciones',
-            'centers',
+            'centros',
             'autonomicCommunities',
             'typeOfAuthorizations',
             'wastes'
@@ -35,10 +35,10 @@ class EnvironmentalAuthorizationController extends Controller
     {
         $request->validate([
             'autorizacion_id' => 'required|exists:autorizaciones,id',
-            'center_id' => 'required|exists:centers,id',
+            'center_id' => 'required|exists:centros,id',
             'code' => 'required|unique:environmental_authorizations,code',
             'autonomic_community_id' => 'required|exists:autonomic_communities,id',
-            'type_of_authorization_id' => 'required|exists:type_of_authorizations,id',
+            // 'type_of_authorization_id' => 'required|exists:type_of_authorizations,id',
             'waste_id' => 'required|exists:wastes,id',
             'lers' => 'nullable|string',
             'pdf' => 'nullable|file|mimes:pdf|max:10240', // max 10MB
