@@ -14,8 +14,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        $this->call(ProductAttributesSeeder::class);
-
+         $this->call([
+                    ListaLerSeeder::class,
+                    ProductAttributesSeeder::class,
+                    TexautoSeeder::class, // nuestro cliente + centro
+                ]);
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',

@@ -20,4 +20,9 @@ class Cliente extends Model
     {
         return $this->belongsTo(Direccion::class, 'direccion_id');
     }
+    public function wastes()
+    {
+        return $this->belongsToMany(\App\Models\Waste::class, 'cliente_residuo')
+                    ->withTimestamps();
+    }
 }

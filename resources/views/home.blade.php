@@ -6,7 +6,7 @@
         <h1 class="fw-bold"> Bienvenido a la plataforma de control logístico</h1>
         <p class="text-muted">Selecciona una sección para comenzar</p>
     </div>
-
+    
     <div class="row g-4">
         <div class="col-md-4">
             <a href="{{ route('clientes.index') }}" class="text-decoration-none">
@@ -19,7 +19,31 @@
                 </div>
             </a>
         </div>
-
+        
+        <div class="col-md-4">
+            <a href="{{ route('centros.index') }}" class="text-decoration-none">
+                <div class="card shadow-sm h-100 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-building fs-1 text-secondary"></i>
+                        <h5 class="card-title mt-3">Centros</h5>
+                        <p class="text-muted">Gestión de centros de operaciones</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-md-4">
+            <a href="{{ route('wastes.index') }}" class="text-decoration-none">
+                <div class="card shadow-sm h-100 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-recycle fs-1 text-success"></i>
+                        <h5 class="card-title mt-3">Residuos</h5>
+                        <p class="text-muted">Control y gestión de residuos</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
         <div class="col-md-4">
             <a href="{{ route('documentos.index') }}" class="text-decoration-none">
                 <div class="card shadow-sm h-100 text-center">
@@ -43,7 +67,7 @@
                 </div>
             </a>
         </div>
-
+        
         <div class="col-md-4">
             <a href="{{ route('recogidas.index') }}" class="text-decoration-none">
                 <div class="card shadow-sm h-100 text-center">
@@ -68,17 +92,6 @@
             </a>
         </div>
 
-        <div class="col-md-4">
-            <a href="{{ route('centros.index') }}" class="text-decoration-none">
-                <div class="card shadow-sm h-100 text-center">
-                    <div class="card-body">
-                        <i class="bi bi-building fs-1 text-secondary"></i>
-                        <h5 class="card-title mt-3">Centros</h5>
-                        <p class="text-muted">Gestión de centros de operaciones</p>
-                    </div>
-                </div>
-            </a>
-        </div>
 
         <div class="col-md-4">
             <a href="{{ route('autorizaciones.index') }}" class="text-decoration-none">
@@ -116,17 +129,6 @@
             </a>
         </div>
 
-        <div class="col-md-4">
-            <a href="{{ route('wastes.index') }}" class="text-decoration-none">
-                <div class="card shadow-sm h-100 text-center">
-                    <div class="card-body">
-                        <i class="bi bi-recycle fs-1 text-success"></i>
-                        <h5 class="card-title mt-3">Residuos</h5>
-                        <p class="text-muted">Control y gestión de residuos</p>
-                    </div>
-                </div>
-            </a>
-        </div>
 
         <div class="col-md-4">
             <a href="{{ route('products.index') }}" class="text-decoration-none">

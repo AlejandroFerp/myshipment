@@ -14,10 +14,9 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>LERS</th>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Description</th>
+                    <th>LER</th>
+                    <th>Internal Code</th>
+                    <th>Comentarios</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -25,11 +24,10 @@
                 @foreach($wastes as $waste)
                     <tr>
                         <td>
-                            {{ $waste->listaLer ? $waste->listaLer->codigo . ' - ' . $waste->listaLer->descripcion : '-' }}
+                            {{ $waste->ler ? $waste->ler->codigo . ' - ' . $waste->ler->descripcion : '-' }}
                         </td>
-                        <td>{{ $waste->code }}</td>
-                        <td>{{ $waste->name }}</td>
-                        <td>{{ $waste->description }}</td>
+                        <td>{{ $waste->internal_code }}</td>
+                        <td>{{ $waste->descripcion_libre ?? '-' }}</td>
                         <td>
                             <a href="{{ route('wastes.edit', $waste) }}" class="btn btn-warning btn-sm">Editar</a>
                             <form action="{{ route('wastes.destroy', $waste) }}" method="POST" style="display:inline-block;">

@@ -4,6 +4,16 @@
 <div class="container mt-4">
     <h1 class="mb-4">Editar Cliente</h1>
 
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('clientes.update', $cliente) }}" method="POST">
         @csrf
         @method('PUT')
@@ -28,14 +38,28 @@
             <input type="text" name="telefono" value="{{ old('telefono', $cliente->telefono) }}" class="form-control">
         </div>
 
+        <!-- Selector múltiple de residuos usando Select2 -->
+        <div class="mb-3">
+            <label for="wastes" class="form-label">Residuos permitidos</label>
+            <select name="wastes[]" id="wastes" class="form-control" multiple>
+                @foreach ($wastes as $waste)
+                    <option value="{{ $waste->id }}"
+                        {{ isset($cliente) && $cliente->wastes->contains($waste->id) ? 'selected' : '' }}>
+                        {{ $waste->internal_code }} - {{ $waste->lista_ler?->descripcion ?? 'sin LER' }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- Dirección principal -->
         <div class="mb-3">
             <label for="direccion_id" class="form-label">Dirección principal</label>
             <select id="direccion_id" name="direccion_id" class="form-select">
                 <option value="">Seleccione una dirección</option>
                 @foreach($direcciones as $direccion)
-                    <option value="{{ $direccion->id }}" 
+                    <option value="{{ $direccion->id }}"
                         {{ (string) old('direccion_id', $cliente->direccion_id) === (string) $direccion->id ? 'selected' : '' }}>
-                        {{ $direccion->address_line_1 }} - {{ $direccion->district_city }}
+                        {{ $direccion->address_line_1 }} - {{ $direccion->district_city }} ({{ $direccion->country }})
                     </option>
                 @endforeach
             </select>
@@ -51,55 +75,26 @@
         </div>
     </form>
 </div>
-
-<!-- Modal -->
-<div class="modal fade" id="addressModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-body" id="addressModalContent"></div>
-    </div>
-  </div>
-</div>
 @endsection
 
 @section('scripts')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
 <script>
-$(document).ready(function() {
-    $('#direccion_id').select2({
-        placeholder: "Seleccione una dirección",
-        allowClear: true,
-        width: '100%'
-    });
+    $(document).ready(function() {
+        // Inicializa multiselect para residuos
+        $('#wastes').multiselect({
+            includeSelectAllOption: true,
+            enableFiltering: true,
+            buttonWidth: '100%',
+            maxHeight: 300,
+            nonSelectedText: 'Selecciona residuos'
+        });
 
-    $('#direccion_id').on('select2:open', function() {
-        if (!$('.select2-create-address').length) {
-            const link = $('<div class="select2-create-address p-2" style="cursor:pointer;color:blue;">+ Crear nueva dirección</div>');
-            link.on('click', function() {
-                $('#addressModalContent').load("{{ route('direcciones.create', [
-                    'direccionable_id' => $cliente->id,
-                    'direccionable_type' => \App\Models\Cliente::class
-                ]) }}", function() {
-                    $('#addressModal').modal('show');
-                    $('#addressForm').off('submit').on('submit', function(e) {
-                        e.preventDefault();
-                        const formData = $(this).serialize();
-                        $.post("{{ route('direcciones.store') }}", formData, function(data) {
-                            const newOption = new Option(data.address_line_1 + ' - ' + data.district_city, data.id, true, true);
-                            $('#direccion_id').append(newOption).trigger('change');
-                            $('#addressModal').modal('hide');
-                        }).fail(function(xhr) {
-                            alert('Error al crear la dirección');
-                        });
-                    });
-                });
-                $('.select2-dropdown').hide();
-            });
-            $('.select2-dropdown').append(link);
-        }
+        // Inicializa Select2 para direcciones
+        $('#direccion_id').select2({
+            placeholder: "Seleccione una dirección",
+            allowClear: true,
+            width: '100%'
+        });
     });
-});
 </script>
 @endsection

@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->integer('internal_code')->unique();
             // 👇 relación con lista_ler
-            $table->foreignId('ler_id')
+            $table->foreignId('lista_ler_id')
                   ->constrained('lista_ler') // apunta a id de lista_ler
                   ->cascadeOnDelete();
             $table->string('descripcion_libre')->nullable();

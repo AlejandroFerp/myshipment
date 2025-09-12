@@ -9,6 +9,8 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use App\Models\Direccion;
+use App\Models\Waste;
+
 class ClienteController extends Controller
 {
     public function index()
@@ -23,6 +25,7 @@ class ClienteController extends Controller
 
         return $pdfService->generarClientePdf($cliente, $direccion);
     }
+    //generar pdf a partir de plantilals de word puede que se quede obsoleto
     public function generatePdfWord(Cliente $cliente)
     {
         // Cargar plantilla
@@ -51,7 +54,8 @@ class ClienteController extends Controller
     public function create()
     {
         $paises = Countries::all()->pluck('name.common')->sort();
-        return view('clientes.create', compact('paises'));
+        $wastes = Waste::all();
+        return view('clientes.create', compact('paises','wastes'));
     }
     public function store(Request $request)
     {
@@ -72,20 +76,25 @@ class ClienteController extends Controller
 
         // Crear dirección asociada
         $direccion=$cliente->direcciones()->create($request->only([
-            'name',
-            'description',
-            'address_line_1',
-            'address_line_2',
-            'district_city',
-            'state_province',
-            'postal_code',
-            'country',
-            'latitude',
-            'longitude',
-        ]));
-        // 3. Guardar la dirección principal en el cliente
-        $cliente->update(['direccion_id' => $direccion->id]);
-    });
+                'name',
+                'description',
+                'address_line_1',
+                'address_line_2',
+                'district_city',
+                'state_province',
+                'postal_code',
+                'country',
+                'latitude',
+                'longitude',
+            ]));
+            // 3. Guardar la dirección principal en el cliente
+            $cliente->update(['direccion_id' => $direccion->id]);
+        });
+        //guardar los residuos
+        if($request->filled('wastes'))
+        {
+            $cliente->wastes()->sync($request->wastes);
+        }
         return redirect()->route('clientes.index')->with('success', 'Cliente creado con dirección');
     }
 
@@ -95,8 +104,11 @@ class ClienteController extends Controller
         // Traer todas las direcciones asociadas al cliente
         $direcciones = $cliente->direcciones()->get();
 
+        // Traer todos los residuos asociados al cliente
+        $wastes = waste::with('lista_ler')->get();
         // Traer la dirección principal
         $direccionPrincipal = null;
+
         if ($cliente->direccion_id) {
             $direccionPrincipal = Direccion::find($cliente->direccion_id);
 
@@ -105,8 +117,10 @@ class ClienteController extends Controller
                 $direcciones->prepend($direccionPrincipal);
             }
         }
-
-        return view('clientes.edit', compact('cliente', 'direcciones'));
+        $wastes = Waste::all();
+        //Cargar relacion wastes del cliente
+        $cliente->load('wastes');
+        return view('clientes.edit', compact('cliente', 'direcciones','wastes'));
     }
 
     public function update(Request $request, Cliente $cliente)
@@ -119,9 +133,20 @@ class ClienteController extends Controller
             'direccion_id' => 'nullable|exists:direcciones,id',
         ]);
         $cliente->update($request->all());
+        if($request->filled('wastes'))
+        {
+            $cliente->wastes()->sync($request->wastes);
+        }
+        else{
+            $cliente->wastes()->sync([]);//limpia si no se escoge nada
+        }
         return redirect()->route('clientes.index');
     }
-
+    public function getResiduos(Cliente $cliente)
+    {
+        $residuos = $cliente->wastes()->get(['id','code','name']);
+        return response()->json($residuos);
+    }
     public function destroy(Cliente $cliente)
     {
         $cliente->delete();

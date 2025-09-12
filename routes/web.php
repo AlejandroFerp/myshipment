@@ -16,6 +16,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductAttributeController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ShipmentController;
+// residuos del cliente
+Route::get('/clientes/{cliente}/residuos', [ClienteController::class, 'getResiduos'])
+     ->name('clientes.residuos');
 // Rutas para Packages
 Route::resource('packages', PackageController::class);
 // Rutas de productos
@@ -82,7 +85,7 @@ Route::post('/autorizaciones', [AutorizacionController::class, 'store'])->name('
 Route::get('/autorizaciones/{autorizacion}/edit', [AutorizacionController::class, 'edit'])->name('autorizaciones.edit');
 Route::put('/autorizaciones/{autorizacion}', [AutorizacionController::class, 'update'])->name('autorizaciones.update');
 Route::delete('/autorizaciones/{autorizacion}', [AutorizacionController::class, 'destroy'])->name('autorizaciones.destroy');
-// Environmental Authorization 
+// Environmental Authorization
 Route::resource('autorizacionesMedioambientales', EnvironmentalAuthorizationController::class)
     ->parameters([
         'autorizacionesMedioambientales' => 'autorizacionMedioambiental'

@@ -21,8 +21,8 @@
         @endif
 
         <div class="mb-3">
-            <label for="lista_ler_id" class="form-label">LERS</label>
-            <select name="lista_ler_id" id="lista_ler_id" class="form-control">
+            <label for="lista_ler_id" class="form-label">LER</label>
+            <select name="lista_ler_id" id="lista_ler_id" class="form-control" required>
                 <option value="">-- Selecciona un LER --</option>
                 @foreach($listaLer as $ler)
                     <option value="{{ $ler->id }}"
@@ -34,20 +34,14 @@
         </div>
 
         <div class="mb-3">
-            <label for="code" class="form-label">Code</label>
-            <input type="text" name="code" id="code" class="form-control"
-                   value="{{ isset($waste) ? $waste->code : old('code') }}" required>
+            <label for="internal_code" class="form-label">Código interno</label>
+            <input type="number" name="internal_code" id="internal_code" class="form-control"
+                   value="{{ isset($waste) ? $waste->internal_code : old('internal_code') }}" required>
         </div>
 
         <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" name="name" id="name" class="form-control"
-                   value="{{ isset($waste) ? $waste->name : old('name') }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea name="description" id="description" class="form-control" rows="4">{{ isset($waste) ? $waste->description : old('description') }}</textarea>
+            <label for="descripcion_libre" class="form-label">Descripción</label>
+            <textarea name="descripcion_libre" id="descripcion_libre" class="form-control" rows="4">{{ isset($waste) ? $waste->descripcion_libre : old('descripcion_libre') }}</textarea>
         </div>
 
         <button type="submit" class="btn btn-success">{{ isset($waste) ? 'Actualizar' : 'Guardar' }}</button>

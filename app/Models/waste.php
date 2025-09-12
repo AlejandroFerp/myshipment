@@ -11,7 +11,7 @@ class Waste extends Model
 
     protected $table = 'wastes';
 
-    protected $fillable = ['lista_ler_id', 'code', 'name', 'description'];
+    protected $fillable = ['internal_code','lista_ler_id', 'descripcion_libre'];
     //relaciones
     // Un waste pertenece a un código LER
     public function ler() {
@@ -23,6 +23,8 @@ class Waste extends Model
                         ->withPivot(['operacion_tratamiento','peligrosidad','observaciones'])
                         ->withTimestamps();
     }
+    public function clientes()
+    {
+        return $this->belongsToMany(\App\Models\Cliente::class,'cliente_residuo')->withTimestamps();
+    }
 }
-
-   

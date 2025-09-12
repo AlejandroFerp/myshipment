@@ -34,24 +34,34 @@ class CentroController extends Controller
         $direcciones = Direccion::orderBy('id')->get();
         // Leer cliente_id desde query string para preseleccionarlo
         $cliente_id = $request->get('cliente_id');
-        return view('centros.create', compact('clientes','direcciones', 'cliente_id'));
+        $residuosDisponibles = collect();//vacío por defecto
+        if($cliente_id)
+        {
+            $cliente=Cliente::with('wastes')->find($cliente_id);
+            $residuosDisponibles=$cliente?->wastes ?? collect();
+        }
+        return view('centros.create', compact('clientes','direcciones', 'cliente_id','residuosDisponibles'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'cliente_id'       => 'required|exists:clientes,id',
-            'direccion_id'     => 'nullable|exists:direcciones,id',
+            'direccion_id'     => 'required|exists:direcciones,id',
             'nombre_comercial' => 'required|string|max:255',
-            'nima'             => 'nullable|string|max:100',
-            'tarifa'           => 'nullable|numeric',
+            'nima'             => 'required|string|max:100',
+            'tarifa'           => 'required|numeric',
             'nombre_contacto'  => 'nullable|string|max:255',
-            'telefono'         => 'nullable|string|max:50',
-            'email'            => 'nullable|email|max:255',
+            'telefono'         => 'required|string|max:50',
+            'email'            => 'required|email|max:255',
             'detalle_envio'    => 'nullable|string',
         ]);
 
         Centro::create($data);
+
+        if($request->filled('wastes')){
+            $centro->wastes()->sync($request->wastes);
+        }
 
         return redirect()->route('centros.index')->with('success', 'Centro creado correctamente.');
     }
@@ -66,7 +76,13 @@ class CentroController extends Controller
     {
         $clientes = Cliente::orderBy('nombre')->get();
         $direcciones = Direccion::orderBy('id')->get();
-        return view('centros.edit', compact('centro','clientes','direcciones'));
+
+        // cargar residuos del cliente del centro
+        $residuosDisponibles = $centro->cliente->wastes;
+
+        $centro ->load('wastes');
+
+        return view('centros.edit', compact('centro','clientes','direcciones','residuosDisponibles'));
     }
 
     public function update(Request $request, Centro $centro)
@@ -85,10 +101,17 @@ class CentroController extends Controller
 
         $centro->update($data);
 
+        if($request->filled('wastes')){
+            $centro->wastes()->sync($request->wastes);
+        }else{
+            $centro->wastes()->sync([]);
+        }
+
+
         return redirect()->route('centros.index')->with('success', 'Centro actualizado correctamente.');
     }
 
-    
+
 public function generarContrato(Centro $centro)
 {
     // Convertimos en objeto directamente con (object)

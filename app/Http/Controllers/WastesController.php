@@ -11,7 +11,7 @@ class WastesController extends Controller
     public function index()
     {
         // Cargamos la relación listaLer para poder usarla si es necesario
-        $wastes = Waste::with('listaLer')->get();
+        $wastes = Waste::with('ler')->get();
         return view('wastes.index', compact('wastes'));
     }
 
@@ -24,10 +24,9 @@ class WastesController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'lista_ler_id' => 'nullable|exists:lista_ler,id', // selección de LER
-            'code' => 'required|string|max:50|unique:wastes,code',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'lista_ler_id' => 'required|exists:lista_ler,id',
+            'internal_code' => 'required|integer|unique:wastes,internal_code,' . ($waste->id ?? 'NULL'),
+            'descripcion_libre' => 'nullable|string',
         ]);
 
         Waste::create($validated);
@@ -45,11 +44,11 @@ class WastesController extends Controller
     public function update(Request $request, Waste $waste)
     {
         $validated = $request->validate([
-            'lista_ler_id' => 'nullable|exists:lista_ler,id', // selección de LER
-            'code' => "required|string|max:50|unique:wastes,code,{$waste->id}",
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'lista_ler_id'     => 'required|exists:lista_ler,id',
+            'internal_code'    => 'required|integer|unique:wastes,internal_code,' . $waste->id,
+            'descripcion_libre'=> 'nullable|string',
         ]);
+
 
         $waste->update($validated);
 
